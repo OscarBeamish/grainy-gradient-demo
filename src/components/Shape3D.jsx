@@ -21,7 +21,6 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
     uniform vec3 uColor1;
     uniform vec3 uColor2;
     uniform float uGradientDirection;
-    uniform float uGradientSpread;
 
     varying vec2 vUv;
     varying vec3 vPosition;
@@ -41,9 +40,6 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
         gradientMix = (vUv.x + vUv.y) * 0.5;
       }
 
-      // Apply spread
-      gradientMix = pow(gradientMix, uGradientSpread);
-
       vec3 color = mix(uColor1, uColor2, gradientMix);
       gl_FragColor = vec4(color, 1.0);
     }
@@ -53,7 +49,6 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
     uColor1: { value: new THREE.Color(shape.color1) },
     uColor2: { value: new THREE.Color(shape.color2) },
     uGradientDirection: { value: shape.gradientDirection },
-    uGradientSpread: { value: shape.gradientSpread },
   }), [])
 
   // Update uniforms when shape changes
@@ -62,13 +57,6 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
       materialRef.current.uniforms.uColor1.value.set(shape.color1)
       materialRef.current.uniforms.uColor2.value.set(shape.color2)
       materialRef.current.uniforms.uGradientDirection.value = shape.gradientDirection
-      materialRef.current.uniforms.uGradientSpread.value = shape.gradientSpread
-    }
-
-    if (meshRef.current && shape.autoRotate) {
-      meshRef.current.rotation.x += shape.rotationSpeed.x
-      meshRef.current.rotation.y += shape.rotationSpeed.y
-      meshRef.current.rotation.z += shape.rotationSpeed.z
     }
   })
 
@@ -77,11 +65,43 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
       case 'sphere':
         return <sphereGeometry args={[shape.scale, 64, 64]} />
       case 'box':
-        return <boxGeometry args={[shape.scale, shape.scale, shape.scale]} />
+        return <boxGeometry args={[shape.scale * 1.5, shape.scale * 1.5, shape.scale * 0.3]} />
       case 'torus':
-        return <torusGeometry args={[shape.scale, shape.scale * 0.4, 32, 100]} />
+        return <torusGeometry args={[shape.scale, shape.scale * 0.3, 32, 100]} />
       case 'cone':
-        return <coneGeometry args={[shape.scale, shape.scale * 1.5, 64]} />
+        return <coneGeometry args={[shape.scale, shape.scale * 1.5, 3]} />
+      case 'guasha':
+        // Create a custom Gua Sha tool shape (elongated rounded rectangle)
+        const guashaShape = new THREE.Shape()
+        const width = shape.scale * 1.2
+        const height = shape.scale * 2.5
+        const radius = shape.scale * 0.3
+
+        // Draw rounded rectangle shape similar to Gua Sha tool
+        guashaShape.moveTo(-width/2 + radius, -height/2)
+        guashaShape.lineTo(width/2 - radius, -height/2)
+        guashaShape.quadraticCurveTo(width/2, -height/2, width/2, -height/2 + radius)
+        guashaShape.lineTo(width/2, height/2 - radius)
+        guashaShape.quadraticCurveTo(width/2, height/2, width/2 - radius, height/2)
+        guashaShape.lineTo(-width/2 + radius, height/2)
+        guashaShape.quadraticCurveTo(-width/2, height/2, -width/2, height/2 - radius)
+        guashaShape.lineTo(-width/2, -height/2 + radius)
+        guashaShape.quadraticCurveTo(-width/2, -height/2, -width/2 + radius, -height/2)
+
+        return (
+          <extrudeGeometry
+            args={[
+              guashaShape,
+              {
+                depth: shape.scale * 0.2,
+                bevelEnabled: true,
+                bevelThickness: 0.05,
+                bevelSize: 0.05,
+                bevelSegments: 10,
+              },
+            ]}
+          />
+        )
       default:
         return <sphereGeometry args={[shape.scale, 64, 64]} />
     }
@@ -91,7 +111,7 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
     <mesh
       ref={meshRef}
       position={[shape.position.x, shape.position.y, shape.position.z]}
-      rotation={[shape.rotation.x, shape.rotation.y, shape.rotation.z]}
+      rotation={[0, 0, 0]}
       onClick={(e) => {
         e.stopPropagation()
         onSelect()

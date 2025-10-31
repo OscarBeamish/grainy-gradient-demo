@@ -3,45 +3,34 @@ import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import GrainyGradient from './components/GrainyGradient'
 import Controls from './components/Controls'
+import Toolbar from './components/Toolbar'
 import Header from './components/Header'
 import './App.css'
 
 function App() {
   const [config, setConfig] = useState({
+    bgColor1: '#667eea',
+    bgColor2: '#764ba2',
     grainIntensity: 0.5,
     grainSize: 1.0,
   })
 
-  const [shapes, setShapes] = useState([
-    {
-      id: 1,
-      type: 'sphere',
-      position: { x: -1.5, y: 0, z: 0 },
-      rotation: { x: 0, y: 0, z: 0 },
-      rotationSpeed: { x: 0, y: 0.01, z: 0 },
+  const [shapes, setShapes] = useState([])
+  const [selectedShapeId, setSelectedShapeId] = useState(null)
+
+  const handleAddShape = (type) => {
+    const newShape = {
+      id: Date.now(),
+      type,
+      position: { x: 0, y: 0, z: 0 },
       scale: 1.5,
       color1: '#ff0080',
       color2: '#7928ca',
       gradientDirection: 0.5,
-      gradientSpread: 1.0,
-      autoRotate: true,
-    },
-    {
-      id: 2,
-      type: 'torus',
-      position: { x: 1.5, y: 0, z: -0.5 },
-      rotation: { x: 0.5, y: 0, z: 0 },
-      rotationSpeed: { x: 0.005, y: 0.01, z: 0 },
-      scale: 1.2,
-      color1: '#00dfd8',
-      color2: '#f093fb',
-      gradientDirection: 0,
-      gradientSpread: 1.5,
-      autoRotate: true,
-    },
-  ])
-
-  const [selectedShapeId, setSelectedShapeId] = useState(1)
+    }
+    setShapes(prev => [...prev, newShape])
+    setSelectedShapeId(newShape.id)
+  }
 
   return (
     <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -50,8 +39,10 @@ function App() {
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Canvas Section */}
         <div style={{ flex: 1, position: 'relative' }}>
+          <Toolbar onAddShape={handleAddShape} />
+
           <Canvas camera={{ position: [0, 0, 5], fov: 50 }}>
-            <OrbitControls enableZoom={true} enablePan={false} />
+            <OrbitControls enableZoom={false} enablePan={false} enableRotate={false} />
             <GrainyGradient
               config={config}
               shapes={shapes}

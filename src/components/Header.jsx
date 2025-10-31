@@ -21,7 +21,7 @@ export default function Header() {
           lineHeight: '1.6',
           maxWidth: '800px'
         }}>
-          Been experimenting with 3D shapes and gradient textures. You can add different shapes, move them around, rotate them, and apply custom gradients. The grain effect sits on top and gives everything a nice textured feel. Click shapes to select them, then use the controls on the right to tweak them however you want.
+          Quick tool for creating grainy gradient backgrounds with shapes. Pick your background gradient colours, add some shapes from the toolbar, move them around, and tweak their colours. The grain effect sits on top and gives everything that nice textured feel.
         </p>
       </div>
     </header>
