@@ -13,7 +13,7 @@ export default function Header() {
           marginBottom: '0.5rem',
           color: '#fff'
         }}>
-          Grainy Gradient Textures
+          Grainy Gradient Shapes
         </h1>
         <p style={{
           fontSize: '0.95rem',
@@ -21,7 +21,7 @@ export default function Header() {
           lineHeight: '1.6',
           maxWidth: '800px'
         }}>
-          Been playing around with grainy gradients in React Three Fiber. They've got this nice organic feel that flat gradients just don't have - adds a bit of texture and depth without being over the top. The grain effect is done with shader noise, so it's all GPU-accelerated and runs smooth. Tweak the controls on the right to see how different settings change the look.
+          Been experimenting with 3D shapes and gradient textures. You can add different shapes, move them around, rotate them, and apply custom gradients. The grain effect sits on top and gives everything a nice textured feel. Click shapes to select them, then use the controls on the right to tweak them however you want.
         </p>
       </div>
     </header>
