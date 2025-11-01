@@ -13,15 +13,18 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
     const color1Rgb = hexToRgb(shape.color1)
     const color2Rgb = hexToRgb(shape.color2)
 
+    // Make container larger to accommodate blur spread
+    const blurPadding = (shape.blur || 40) * 3
+
     const baseStyle = {
       position: 'absolute',
       left: '50%',
       top: '50%',
       transform: 'translate(-50%, -50%)',
-      width: `${shape.scale * 100}px`,
-      height: `${shape.scale * 100}px`,
-      // Gradient with transparency at edges so blur can fade to background
-      background: `radial-gradient(circle at 20% 20%, ${shape.color1} 0%, ${shape.color2} 50%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.8) 70%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 100%)`,
+      width: `${shape.scale * 100 + blurPadding * 2}px`,
+      height: `${shape.scale * 100 + blurPadding * 2}px`,
+      // Gradient with transparency at edges so blur can fade to background - centered at top-left for directional effect
+      background: `radial-gradient(circle at 30% 30%, ${shape.color1} 0%, ${shape.color2} 20%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.8) 30%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 45%)`,
       filter: isBlurred ? `blur(${(shape.blur || 40) * 12}px)` : 'blur(0px)',
       opacity: shape.opacity || 0.8,
       cursor: isBlurred ? 'default' : 'pointer',
