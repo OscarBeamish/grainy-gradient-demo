@@ -114,7 +114,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         }}
       />
 
-      {/* Less blurred foreground layer - creates layered blur effect */}
+      {/* Sharp foreground layer with radial mask to reveal blur on edges */}
       <div
         onMouseDown={(e) => {
           e.stopPropagation()
@@ -127,6 +127,8 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         style={{
           ...getShapeStyle(false),
           cursor: 'move',
+          WebkitMaskImage: 'radial-gradient(ellipse at 25% 25%, black 15%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 50%, transparent 70%)',
+          maskImage: 'radial-gradient(ellipse at 25% 25%, black 15%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 50%, transparent 70%)',
         }}
       />
     </div>
