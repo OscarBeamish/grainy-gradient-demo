@@ -27,6 +27,7 @@ function App() {
       id: Date.now(),
       type,
       position: { x: 0, y: 0, z: 0 },
+      rotation: { x: 0, y: 0, z: 0 },
       scale: 1.5,
       color1: '#ff0080',
       color2: '#7928ca',

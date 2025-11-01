@@ -130,7 +130,7 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
     <mesh
       ref={meshRef}
       position={[shape.position.x, shape.position.y, shape.position.z]}
-      rotation={[0, 0, 0]}
+      rotation={[shape.rotation.x, shape.rotation.y, shape.rotation.z]}
       onClick={(e) => {
         e.stopPropagation()
         onSelect()

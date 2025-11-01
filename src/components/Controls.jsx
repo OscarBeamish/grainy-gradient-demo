@@ -21,6 +21,14 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
     ))
   }
 
+  const handleRotationChange = (axis, value) => {
+    setShapes(prev => prev.map(shape =>
+      shape.id === selectedShapeId
+        ? { ...shape, rotation: { ...shape.rotation, [axis]: parseFloat(value) } }
+        : shape
+    ))
+  }
+
   const deleteShape = () => {
     if (selectedShapeId) {
       setShapes(prev => prev.filter(s => s.id !== selectedShapeId))
@@ -153,6 +161,30 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
                     step="0.1"
                     value={selectedShape.position[axis]}
                     onChange={(e) => handlePositionChange(axis, e.target.value)}
+                    style={{ width: '100%' }}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Rotation */}
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
+                Rotation
+              </label>
+              {['x', 'y', 'z'].map(axis => (
+                <div key={axis} style={{ marginBottom: '0.5rem' }}>
+                  <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <span>{axis.toUpperCase()}</span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{(selectedShape.rotation[axis] * (180 / Math.PI)).toFixed(0)}°</span>
+                  </label>
+                  <input
+                    type="range"
+                    min="0"
+                    max={Math.PI * 2}
+                    step="0.01"
+                    value={selectedShape.rotation[axis]}
+                    onChange={(e) => handleRotationChange(axis, e.target.value)}
                     style={{ width: '100%' }}
                   />
                 </div>
