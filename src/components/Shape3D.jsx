@@ -71,33 +71,52 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
       case 'cone':
         return <coneGeometry args={[shape.scale, shape.scale * 1.5, 3]} />
       case 'guasha':
-        // Create a custom Gua Sha tool shape (elongated rounded rectangle)
+        // Create a jade Gua Sha facial massage tool shape (heart/wing shape)
         const guashaShape = new THREE.Shape()
-        const width = shape.scale * 1.2
-        const height = shape.scale * 2.5
-        const radius = shape.scale * 0.3
+        const scale = shape.scale
 
-        // Draw rounded rectangle shape similar to Gua Sha tool
-        guashaShape.moveTo(-width/2 + radius, -height/2)
-        guashaShape.lineTo(width/2 - radius, -height/2)
-        guashaShape.quadraticCurveTo(width/2, -height/2, width/2, -height/2 + radius)
-        guashaShape.lineTo(width/2, height/2 - radius)
-        guashaShape.quadraticCurveTo(width/2, height/2, width/2 - radius, height/2)
-        guashaShape.lineTo(-width/2 + radius, height/2)
-        guashaShape.quadraticCurveTo(-width/2, height/2, -width/2, height/2 - radius)
-        guashaShape.lineTo(-width/2, -height/2 + radius)
-        guashaShape.quadraticCurveTo(-width/2, -height/2, -width/2 + radius, -height/2)
+        // Create a heart/teardrop shape like a real Gua Sha tool
+        // Top curve (wide part)
+        guashaShape.moveTo(0, scale * 1.2)
+
+        // Right side - curved outward then inward
+        guashaShape.bezierCurveTo(
+          scale * 0.8, scale * 1.2,    // control point 1
+          scale * 1.0, scale * 0.6,    // control point 2
+          scale * 0.9, 0               // end point
+        )
+
+        // Right bottom curve
+        guashaShape.bezierCurveTo(
+          scale * 0.8, scale * -0.4,   // control point 1
+          scale * 0.4, scale * -0.8,   // control point 2
+          0, scale * -1.0              // bottom point
+        )
+
+        // Left bottom curve (mirror)
+        guashaShape.bezierCurveTo(
+          scale * -0.4, scale * -0.8,  // control point 1
+          scale * -0.8, scale * -0.4,  // control point 2
+          scale * -0.9, 0              // end point
+        )
+
+        // Left side - curved outward then inward (mirror)
+        guashaShape.bezierCurveTo(
+          scale * -1.0, scale * 0.6,   // control point 1
+          scale * -0.8, scale * 1.2,   // control point 2
+          0, scale * 1.2               // back to start
+        )
 
         return (
           <extrudeGeometry
             args={[
               guashaShape,
               {
-                depth: shape.scale * 0.2,
+                depth: shape.scale * 0.15,
                 bevelEnabled: true,
-                bevelThickness: 0.05,
-                bevelSize: 0.05,
-                bevelSegments: 10,
+                bevelThickness: 0.08,
+                bevelSize: 0.06,
+                bevelSegments: 12,
               },
             ]}
           />
