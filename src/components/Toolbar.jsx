@@ -1,29 +1,6 @@
 export default function Toolbar({ onAddShape }) {
   const shapes = [
-    // Row 1
     { type: 'circle', icon: '●', label: 'Circle' },
-    { type: 'blob1', icon: '～', label: 'Blob 1' },
-    { type: 'ellipse-h', icon: '⬭', label: 'Ellipse' },
-    { type: 'blob2', icon: '◪', label: 'Blob 2' },
-    { type: 'heart', icon: '♥', label: 'Heart' },
-    // Row 2
-    { type: 'blob3', icon: '◕', label: 'Blob 3' },
-    { type: 'blob4', icon: '◔', label: 'Blob 4' },
-    { type: 'arch', icon: '⌒', label: 'Arch' },
-    { type: 'circle-soft', icon: '◉', label: 'Soft' },
-    { type: 'triangle-round', icon: '▴', label: 'Triangle' },
-    // Row 3
-    { type: 'chevron', icon: '⌄', label: 'Chevron' },
-    { type: 'triangle', icon: '▲', label: 'Sharp Tri' },
-    { type: 'ring', icon: '◯', label: 'Ring' },
-    { type: 'sphere', icon: '◐', label: 'Sphere' },
-    { type: 'pentagon', icon: '⬟', label: 'Pentagon' },
-    // Row 4
-    { type: 'wave', icon: '〰', label: 'Wave' },
-    { type: 'rounded-rect', icon: '▢', label: 'Rectangle' },
-    { type: 'wave2', icon: '≈', label: 'Wave 2' },
-    { type: 'pill', icon: '▬', label: 'Pill' },
-    { type: 'cone', icon: '◢', label: 'Cone' },
   ]
 
   return (
