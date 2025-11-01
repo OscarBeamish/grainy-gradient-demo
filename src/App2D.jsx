@@ -13,10 +13,25 @@ function App2D() {
     grainSize: 0.9,
   })
 
-  const [shapes, setShapes] = useState([])
+  const [shapes, setShapes] = useState([
+    {
+      id: 1,
+      type: 'circle',
+      position: { x: 0, y: 0 },
+      rotation: { z: 0 },
+      scale: 4,
+      blur: 40,
+      opacity: 0.8,
+      color1: '#00bfff',
+      color2: '#8b00ff',
+      gradientDirection: 0.5,
+    }
+  ])
   const [selectedShapeId, setSelectedShapeId] = useState(null)
   const [uiVisible, setUiVisible] = useState(true)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 })
 
   const handleAddShape = (type) => {
     const newShape = {
@@ -49,14 +64,36 @@ function App2D() {
     setSelectedShapeId(null)
   }
 
+  const handleMouseDown = (e, shapeId) => {
+    setSelectedShapeId(shapeId)
+    setIsDragging(true)
+    setDragStart({ x: e.clientX, y: e.clientY })
+  }
+
+  const handleMouseMove = (e) => {
+    if (!isDragging || !selectedShapeId) return
+
+    const deltaX = (e.clientX - dragStart.x) / 80
+    const deltaY = (e.clientY - dragStart.y) / 80
+
+    setShapes(prev => prev.map(shape =>
+      shape.id === selectedShapeId
+        ? { ...shape, position: { x: shape.position.x + deltaX, y: shape.position.y + deltaY } }
+        : shape
+    ))
+
+    setDragStart({ x: e.clientX, y: e.clientY })
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
   return (
     <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {uiVisible && <Header />}
-
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Canvas Section */}
         <div style={{ flex: 1, position: 'relative' }}>
-          {uiVisible && <Toolbar onAddShape={handleAddShape} />}
 
           {/* UI Toggle Button */}
           <button
@@ -70,13 +107,14 @@ function App2D() {
               left: '20px',
               zIndex: 10000,
               padding: '10px 20px',
-              background: 'rgba(255, 255, 255, 0.9)',
-              border: '1px solid #ddd',
+              background: '#000',
+              border: '1px solid #333',
               borderRadius: '8px',
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: '500',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              color: '#fff',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
             {uiVisible ? 'Hide Tools' : 'Show Tools'}
@@ -94,13 +132,14 @@ function App2D() {
               left: '140px',
               zIndex: 10000,
               padding: '10px 20px',
-              background: 'rgba(255, 255, 255, 0.9)',
-              border: '1px solid #ddd',
+              background: '#000',
+              border: '1px solid #333',
               borderRadius: '8px',
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: '500',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+              color: '#fff',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
             }}
           >
             {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
@@ -109,6 +148,8 @@ function App2D() {
           {/* 2D Canvas Area */}
           <div
             onClick={handleCanvasClick}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
             style={{
               width: '100%',
               height: '100%',
@@ -124,6 +165,7 @@ function App2D() {
                 shape={shape}
                 isSelected={selectedShapeId === shape.id}
                 onSelect={() => setSelectedShapeId(shape.id)}
+                onMouseDown={(e) => handleMouseDown(e, shape.id)}
               />
             ))}
 

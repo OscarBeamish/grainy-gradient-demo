@@ -130,13 +130,13 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
             <div style={{ marginBottom: '1rem' }}>
               <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
                 <span>Size</span>
-                <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{selectedShape.scale.toFixed(2)}</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{selectedShape.scale.toFixed(1)}</span>
               </label>
               <input
                 type="range"
                 min="0.5"
-                max="3"
-                step="0.1"
+                max="20"
+                step="0.5"
                 value={selectedShape.scale}
                 onChange={(e) => handleShapeChange('scale', parseFloat(e.target.value))}
                 style={{ width: '100%' }}
