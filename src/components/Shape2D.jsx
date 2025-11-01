@@ -22,7 +22,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       height: `${shape.scale * 100}px`,
       // Solid gradient - blur creates the soft edge effect, not transparency
       background: `radial-gradient(circle at 20% 20%, ${shape.color1} 0%, ${shape.color2} 100%)`,
-      filter: isBlurred ? `blur(${(shape.blur || 40) * 6}px)` : 'blur(0px)',
+      filter: isBlurred ? `blur(${(shape.blur || 40) * 12}px)` : 'blur(0px)',
       opacity: shape.opacity || 0.8,
       cursor: isBlurred ? 'default' : 'pointer',
       mixBlendMode: 'normal',
