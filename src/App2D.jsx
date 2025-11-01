@@ -7,8 +7,8 @@ import './App.css'
 
 function App2D() {
   const [config, setConfig] = useState({
-    bgColor1: '#E2E2E2',
-    bgColor2: '#E2E2E2',
+    bgColor1: '#030621',
+    bgColor2: '#030621',
     grainIntensity: 1,
     grainSize: 0.9,
   })
@@ -22,8 +22,8 @@ function App2D() {
       scale: 4,
       blur: 40,
       opacity: 0.8,
-      color1: '#00bfff',
-      color2: '#8b00ff',
+      color1: '#7cffeb',
+      color2: '#00d4aa',
       gradientDirection: 0.5,
     }
   ])
