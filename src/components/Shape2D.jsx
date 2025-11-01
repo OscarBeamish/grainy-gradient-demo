@@ -39,7 +39,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
     switch (shape.type) {
       // Row 1
       case 'circle':
-        return { ...baseStyle, borderRadius: '50%' }
+        return baseStyle // No borderRadius - gradient creates the circle
       case 'blob1':
         return { ...baseStyle, borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%' }
       case 'ellipse-h':
