@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { EffectComposer, DepthOfField } from '@react-three/postprocessing'
 import GrainyGradient from './components/GrainyGradient'
 import Controls from './components/Controls'
 import Toolbar from './components/Toolbar'
@@ -13,6 +14,7 @@ function App() {
     bgColor2: '#764ba2',
     grainIntensity: 0.5,
     grainSize: 1.0,
+    blurAmount: 0.005,
   })
 
   const [shapes, setShapes] = useState([])
@@ -49,6 +51,16 @@ function App() {
               selectedShapeId={selectedShapeId}
               onShapeSelect={setSelectedShapeId}
             />
+
+            {/* Depth of Field effect for blur on close objects */}
+            <EffectComposer>
+              <DepthOfField
+                focusDistance={0}
+                focalLength={0.02}
+                bokehScale={config.blurAmount}
+                height={480}
+              />
+            </EffectComposer>
           </Canvas>
         </div>
 
