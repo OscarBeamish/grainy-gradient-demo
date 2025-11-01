@@ -107,14 +107,47 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
       }}
     >
-      {/* Extremely blurred background layer */}
+      {/* Layer 5: Heaviest blur (bottom layer) */}
       <div
         style={{
-          ...getShapeStyle(true),
+          ...getShapeStyle(false),
+          filter: 'blur(120px)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
+          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
         }}
       />
 
-      {/* Sharp foreground layer with radial mask to reveal blur on edges */}
+      {/* Layer 4: Heavy blur */}
+      <div
+        style={{
+          ...getShapeStyle(false),
+          filter: 'blur(80px)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
+          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
+        }}
+      />
+
+      {/* Layer 3: Medium blur */}
+      <div
+        style={{
+          ...getShapeStyle(false),
+          filter: 'blur(40px)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
+          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
+        }}
+      />
+
+      {/* Layer 2: Light blur */}
+      <div
+        style={{
+          ...getShapeStyle(false),
+          filter: 'blur(15px)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
+          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
+        }}
+      />
+
+      {/* Layer 1: Sharp layer (top) */}
       <div
         onMouseDown={(e) => {
           e.stopPropagation()
@@ -126,9 +159,10 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         }}
         style={{
           ...getShapeStyle(false),
+          filter: 'blur(0px)',
           cursor: 'move',
-          WebkitMaskImage: 'radial-gradient(ellipse at 25% 25%, black 15%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 50%, transparent 70%)',
-          maskImage: 'radial-gradient(ellipse at 25% 25%, black 15%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 50%, transparent 70%)',
+          WebkitMaskImage: 'radial-gradient(ellipse at 18% 18%, black 20%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 60%, transparent 75%)',
+          maskImage: 'radial-gradient(ellipse at 18% 18%, black 20%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 60%, transparent 75%)',
         }}
       />
 
@@ -145,9 +179,9 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
           pointerEvents: 'none',
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           mixBlendMode: 'overlay',
-          opacity: 0.4,
-          WebkitMaskImage: 'radial-gradient(ellipse at 25% 25%, transparent 15%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.7) 60%, black 80%)',
-          maskImage: 'radial-gradient(ellipse at 25% 25%, transparent 15%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.7) 60%, black 80%)',
+          opacity: 0.5,
+          WebkitMaskImage: 'radial-gradient(ellipse at 18% 18%, transparent 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 65%, black 85%)',
+          maskImage: 'radial-gradient(ellipse at 18% 18%, transparent 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 65%, black 85%)',
         }}
       />
     </div>
