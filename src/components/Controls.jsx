@@ -38,15 +38,15 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
 
   return (
     <div style={{
-      width: '320px',
+      width: '300px',
       background: 'rgba(0, 0, 0, 0.8)',
       backdropFilter: 'blur(10px)',
       borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-      padding: '1.5rem',
+      padding: '1rem',
       overflowY: 'auto',
       display: 'flex',
       flexDirection: 'column',
-      gap: '1.5rem'
+      gap: '1rem'
     }}>
       {/* Background Gradient */}
       <div>
@@ -127,8 +127,8 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
             </h3>
 
             {/* Scale */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.9)' }}>
                 <span>Size</span>
                 <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{selectedShape.scale.toFixed(1)}</span>
               </label>
@@ -143,101 +143,48 @@ export default function Controls({ config, setConfig, shapes, setShapes, selecte
               />
             </div>
 
-            {/* Position */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
-                Position
+            {/* Blur */}
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.9)' }}>
+                <span>Blur</span>
+                <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{selectedShape.blur}px</span>
               </label>
-              {['x', 'y'].map(axis => (
-                <div key={axis} style={{ marginBottom: '0.5rem' }}>
-                  <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                    <span>{axis.toUpperCase()}</span>
-                    <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{selectedShape.position[axis].toFixed(2)}</span>
-                  </label>
-                  <input
-                    type="range"
-                    min="-4"
-                    max="4"
-                    step="0.1"
-                    value={selectedShape.position[axis]}
-                    onChange={(e) => handlePositionChange(axis, e.target.value)}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-              ))}
+              <input
+                type="range"
+                min="0"
+                max="200"
+                step="5"
+                value={selectedShape.blur}
+                onChange={(e) => handleShapeChange('blur', parseFloat(e.target.value))}
+                style={{ width: '100%' }}
+              />
             </div>
 
-            {/* Rotation */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
-                Rotation
-              </label>
-              {['x', 'y', 'z'].map(axis => (
-                <div key={axis} style={{ marginBottom: '0.5rem' }}>
-                  <label style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.7)' }}>
-                    <span>{axis.toUpperCase()}</span>
-                    <span style={{ color: 'rgba(255, 255, 255, 0.5)' }}>{(selectedShape.rotation[axis] * (180 / Math.PI)).toFixed(0)}°</span>
-                  </label>
-                  <input
-                    type="range"
-                    min="0"
-                    max={Math.PI * 2}
-                    step="0.01"
-                    value={selectedShape.rotation[axis]}
-                    onChange={(e) => handleRotationChange(axis, e.target.value)}
-                    style={{ width: '100%' }}
-                  />
-                </div>
-              ))}
-            </div>
+            {/* Position - Drag to move shape */}
 
             {/* Gradient Colors */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.9)' }}>
                 Gradient Start
               </label>
               <input
                 type="color"
                 value={selectedShape.color1}
                 onChange={(e) => handleShapeChange('color1', e.target.value)}
-                style={{ width: '100%', height: '40px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                style={{ width: '100%', height: '35px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
               />
             </div>
 
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
+            <div style={{ marginBottom: '0.75rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.25rem', color: 'rgba(255, 255, 255, 0.9)' }}>
                 Gradient End
               </label>
               <input
                 type="color"
                 value={selectedShape.color2}
                 onChange={(e) => handleShapeChange('color2', e.target.value)}
-                style={{ width: '100%', height: '40px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                style={{ width: '100%', height: '35px', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
               />
-            </div>
-
-            {/* Gradient Direction */}
-            <div style={{ marginBottom: '1rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.9)' }}>
-                Gradient Direction
-              </label>
-              <select
-                value={selectedShape.gradientDirection < 0.33 ? '0' : selectedShape.gradientDirection < 0.66 ? '0.5' : '1'}
-                onChange={(e) => handleShapeChange('gradientDirection', parseFloat(e.target.value))}
-                style={{
-                  width: '100%',
-                  padding: '0.5rem',
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: '4px',
-                  color: '#fff',
-                  fontSize: '0.875rem'
-                }}
-              >
-                <option value="0">Horizontal</option>
-                <option value="0.5">Vertical</option>
-                <option value="1">Diagonal</option>
-              </select>
             </div>
 
             {/* Delete Shape */}
