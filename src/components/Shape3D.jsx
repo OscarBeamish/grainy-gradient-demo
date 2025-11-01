@@ -142,6 +142,9 @@ export default function Shape3D({ shape, isSelected, onSelect }) {
         vertexShader={vertexShader}
         fragmentShader={fragmentShader}
         uniforms={uniforms}
+        transparent={true}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
 
       {/* Selection outline */}

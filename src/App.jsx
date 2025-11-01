@@ -10,8 +10,8 @@ import './App.css'
 
 function App() {
   const [config, setConfig] = useState({
-    bgColor1: '#ffd6e8',
-    bgColor2: '#ffb3d9',
+    bgColor1: '#E2E2E2',
+    bgColor2: '#E2E2E2',
     grainIntensity: 0.5,
     grainSize: 1.0,
     blurAmount: 0.005,
