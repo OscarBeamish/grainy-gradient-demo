@@ -11,8 +11,8 @@ function App() {
   const [config, setConfig] = useState({
     bgColor1: '#667eea',
     bgColor2: '#764ba2',
-    grainIntensity: 0.5,
-    grainSize: 1.0,
+    grainIntensity: 0.8,
+    grainSize: 0.5,
   })
 
   const [shapes, setShapes] = useState([])
