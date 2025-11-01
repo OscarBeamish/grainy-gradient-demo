@@ -20,8 +20,8 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       transform: 'translate(-50%, -50%)',
       width: `${shape.scale * 100}px`,
       height: `${shape.scale * 100}px`,
-      // Solid gradient - blur creates the soft edge effect, not transparency
-      background: `radial-gradient(circle at 20% 20%, ${shape.color1} 0%, ${shape.color2} 100%)`,
+      // Gradient with transparency at edges so blur can fade to background
+      background: `radial-gradient(circle at 20% 20%, ${shape.color1} 0%, ${shape.color2} 50%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.8) 70%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 100%)`,
       filter: isBlurred ? `blur(${(shape.blur || 40) * 12}px)` : 'blur(0px)',
       opacity: shape.opacity || 0.8,
       cursor: isBlurred ? 'default' : 'pointer',
