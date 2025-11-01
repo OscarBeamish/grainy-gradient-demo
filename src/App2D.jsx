@@ -9,8 +9,8 @@ function App2D() {
   const [config, setConfig] = useState({
     bgColor1: '#E2E2E2',
     bgColor2: '#E2E2E2',
-    grainIntensity: 0.5,
-    grainSize: 1.0,
+    grainIntensity: 1,
+    grainSize: 0.9,
   })
 
   const [shapes, setShapes] = useState([])
