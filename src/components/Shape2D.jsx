@@ -131,6 +131,25 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
           maskImage: 'radial-gradient(ellipse at 25% 25%, black 15%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.3) 50%, transparent 70%)',
         }}
       />
+
+      {/* Directional grain overlay - more grain where more blur */}
+      <div
+        style={{
+          position: 'absolute',
+          left: '50%',
+          top: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: `${shape.scale * 100}px`,
+          height: `${shape.scale * 100}px`,
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          mixBlendMode: 'overlay',
+          opacity: 0.4,
+          WebkitMaskImage: 'radial-gradient(ellipse at 25% 25%, transparent 15%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.7) 60%, black 80%)',
+          maskImage: 'radial-gradient(ellipse at 25% 25%, transparent 15%, rgba(0,0,0,0.3) 35%, rgba(0,0,0,0.7) 60%, black 80%)',
+        }}
+      />
     </div>
   )
 }
