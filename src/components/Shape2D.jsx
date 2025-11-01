@@ -1,4 +1,7 @@
+import { useMemo } from 'react'
+
 export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
+  const filterId = useMemo(() => `blur-filter-${shape.id}`, [shape.id])
   const getShapeStyle = (isBlurred = false) => {
     // Convert hex colors to rgba for transparency control
     const hexToRgb = (hex) => {
@@ -101,6 +104,9 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
     }
   }
 
+  const size = shape.scale * 100
+  const maxBlur = shape.blur || 40
+
   return (
     <div
       style={{
@@ -108,85 +114,78 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         left: `calc(50% + ${shape.position.x * 80}px)`,
         top: `calc(50% + ${shape.position.y * 80}px)`,
         transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
+        width: `${size * 3}px`,
+        height: `${size * 3}px`,
+      }}
+      onMouseDown={(e) => {
+        e.stopPropagation()
+        onMouseDown(e)
+      }}
+      onClick={(e) => {
+        e.stopPropagation()
+        onSelect()
       }}
     >
-      {/* Layer 5: Heaviest blur (bottom layer) */}
-      <div
-        style={{
-          ...getShapeStyle(false),
-          filter: `blur(${(shape.blur || 40) * 3}px)`,
-          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
-          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
-        }}
-      />
+      <svg
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${size * 3} ${size * 3}`}
+        style={{ cursor: 'move' }}
+      >
+        <defs>
+          {/* Radial gradient for the circle colors */}
+          <radialGradient id={`gradient-${shape.id}`} cx="40%" cy="40%">
+            <stop offset="0%" stopColor={shape.color1} />
+            <stop offset="100%" stopColor={shape.color2} />
+          </radialGradient>
 
-      {/* Layer 4: Heavy blur */}
-      <div
-        style={{
-          ...getShapeStyle(false),
-          filter: `blur(${(shape.blur || 40) * 2}px)`,
-          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
-          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
-        }}
-      />
+          {/* Variable blur filter using feGaussianBlur */}
+          <filter id={filterId} x="-100%" y="-100%" width="300%" height="300%">
+            {/* Create blur map - less blur at top-left, more at bottom-right */}
+            <feGaussianBlur in="SourceGraphic" stdDeviation={maxBlur} result="blur" />
 
-      {/* Layer 3: Medium blur */}
-      <div
-        style={{
-          ...getShapeStyle(false),
-          filter: `blur(${shape.blur || 40}px)`,
-          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
-          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
-        }}
-      />
+            {/* Sharp version */}
+            <feGaussianBlur in="SourceGraphic" stdDeviation="0" result="sharp" />
 
-      {/* Layer 2: Light blur */}
-      <div
-        style={{
-          ...getShapeStyle(false),
-          filter: `blur(${(shape.blur || 40) * 0.4}px)`,
-          WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
-          maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
-        }}
-      />
+            {/* Blend between sharp and blurred using displacement */}
+            <feImage href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3CradialGradient id='blurMask' cx='30%25' cy='30%25'%3E%3Cstop offset='0%25' stop-color='white'/%3E%3Cstop offset='40%25' stop-color='%23888'/%3E%3Cstop offset='100%25' stop-color='black'/%3E%3C/radialGradient%3E%3Crect width='100%25' height='100%25' fill='url(%23blurMask)'/%3E%3C/svg%3E" result="blurMask" />
 
-      {/* Layer 1: Sharp layer (top) */}
-      <div
-        onMouseDown={(e) => {
-          e.stopPropagation()
-          onMouseDown(e)
-        }}
-        onClick={(e) => {
-          e.stopPropagation()
-          onSelect()
-        }}
-        style={{
-          ...getShapeStyle(false),
-          filter: 'blur(0px)',
-          cursor: 'move',
-          WebkitMaskImage: 'radial-gradient(ellipse at 18% 18%, black 20%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 60%, transparent 75%)',
-          maskImage: 'radial-gradient(ellipse at 18% 18%, black 20%, rgba(0,0,0,0.7) 40%, rgba(0,0,0,0.2) 60%, transparent 75%)',
-        }}
-      />
+            <feComposite in="sharp" in2="blurMask" operator="in" result="sharpMasked" />
+            <feComposite in="blur" in2="blurMask" operator="out" result="blurMasked" />
+            <feMerge>
+              <feMergeNode in="blurMasked" />
+              <feMergeNode in="sharpMasked" />
+            </feMerge>
+          </filter>
+        </defs>
 
-      {/* Directional grain overlay - more grain where more blur */}
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          top: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: `${shape.scale * 100}px`,
-          height: `${shape.scale * 100}px`,
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          mixBlendMode: 'overlay',
-          opacity: 0.5,
-          WebkitMaskImage: 'radial-gradient(ellipse at 18% 18%, transparent 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 65%, black 85%)',
-          maskImage: 'radial-gradient(ellipse at 18% 18%, transparent 20%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 65%, black 85%)',
-        }}
-      />
+        {/* The circle with variable blur */}
+        <circle
+          cx={size * 1.5}
+          cy={size * 1.5}
+          r={size / 2}
+          fill={`url(#gradient-${shape.id})`}
+          filter={`url(#${filterId})`}
+          opacity={shape.opacity || 0.8}
+        />
+      </svg>
+
+      {/* Selection indicator */}
+      {isSelected && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: `${size}px`,
+            height: `${size}px`,
+            borderRadius: '50%',
+            border: '2px solid #14b8a6',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
     </div>
   )
 }
