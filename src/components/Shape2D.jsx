@@ -1,14 +1,30 @@
 export default function Shape2D({ shape, isSelected, onSelect }) {
   const getShapeStyle = (isBlurred = false) => {
+    // Convert hex colors to rgba for transparency control
+    const hexToRgb = (hex) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null
+    }
+
+    const color1Rgb = hexToRgb(shape.color1)
+    const color2Rgb = hexToRgb(shape.color2)
+
     const baseStyle = {
       position: 'absolute',
-      left: isBlurred ? '50%' : '50%',
-      top: isBlurred ? '50%' : '50%',
+      left: '50%',
+      top: '50%',
       transform: 'translate(-50%, -50%)',
       width: `${shape.scale * 100}px`,
       height: `${shape.scale * 100}px`,
-      background: `linear-gradient(${shape.gradientDirection < 0.33 ? '90deg' : shape.gradientDirection < 0.66 ? '180deg' : '135deg'}, ${shape.color1}, ${shape.color2})`,
-      filter: isBlurred ? `blur(${shape.blur || 40}px)` : 'none',
+      // Use radial gradient with alpha for smooth fade to transparent
+      background: isBlurred
+        ? `radial-gradient(ellipse at 35% 35%, rgba(${color1Rgb.r},${color1Rgb.g},${color1Rgb.b},0.9) 0%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.7) 40%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 70%)`
+        : `radial-gradient(ellipse at 35% 35%, ${shape.color1} 0%, ${shape.color2} 50%, transparent 85%)`,
+      filter: isBlurred ? `blur(${(shape.blur || 40) * 2}px)` : 'blur(8px)',
       opacity: shape.opacity || 0.8,
       cursor: isBlurred ? 'default' : 'pointer',
       mixBlendMode: 'normal',
@@ -93,17 +109,14 @@ export default function Shape2D({ shape, isSelected, onSelect }) {
         transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
       }}
     >
-      {/* Heavily blurred shadow layer - extends beyond shape */}
+      {/* Extremely blurred background layer */}
       <div
         style={{
           ...getShapeStyle(true),
-          left: '54%',
-          top: '54%',
-          filter: `blur(${(shape.blur || 40) * 1.5}px)`,
         }}
       />
 
-      {/* Sharp gradient layer - fades completely to transparent on one edge */}
+      {/* Less blurred foreground layer - creates layered blur effect */}
       <div
         onClick={(e) => {
           e.stopPropagation()
@@ -111,8 +124,6 @@ export default function Shape2D({ shape, isSelected, onSelect }) {
         }}
         style={{
           ...getShapeStyle(false),
-          WebkitMaskImage: 'radial-gradient(ellipse 120% 120% at 30% 30%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 75%)',
-          maskImage: 'radial-gradient(ellipse 120% 120% at 30% 30%, rgba(0,0,0,1) 20%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,0) 75%)',
         }}
       />
     </div>
