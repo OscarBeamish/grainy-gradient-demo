@@ -1,18 +1,18 @@
 export default function Shape2D({ shape, isSelected, onSelect }) {
-  const getShapeStyle = () => {
+  const getShapeStyle = (isBlurred = false) => {
     const baseStyle = {
       position: 'absolute',
-      left: `calc(50% + ${shape.position.x * 80}px)`,
-      top: `calc(50% + ${shape.position.y * 80}px)`,
-      transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
+      left: isBlurred ? '50%' : '50%',
+      top: isBlurred ? '50%' : '50%',
+      transform: 'translate(-50%, -50%)',
       width: `${shape.scale * 100}px`,
       height: `${shape.scale * 100}px`,
       background: `linear-gradient(${shape.gradientDirection < 0.33 ? '90deg' : shape.gradientDirection < 0.66 ? '180deg' : '135deg'}, ${shape.color1}, ${shape.color2})`,
-      filter: `blur(${shape.blur || 40}px)`,
+      filter: isBlurred ? `blur(${shape.blur || 40}px)` : 'none',
       opacity: shape.opacity || 0.8,
-      cursor: 'pointer',
+      cursor: isBlurred ? 'default' : 'pointer',
       mixBlendMode: 'normal',
-      transition: 'filter 0.2s ease',
+      pointerEvents: isBlurred ? 'none' : 'auto',
     }
 
     // Add border for selection
@@ -86,11 +86,24 @@ export default function Shape2D({ shape, isSelected, onSelect }) {
 
   return (
     <div
-      onClick={(e) => {
-        e.stopPropagation()
-        onSelect()
+      style={{
+        position: 'absolute',
+        left: `calc(50% + ${shape.position.x * 80}px)`,
+        top: `calc(50% + ${shape.position.y * 80}px)`,
+        transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
       }}
-      style={getShapeStyle()}
-    />
+    >
+      {/* Blurred shadow layer behind */}
+      <div style={getShapeStyle(true)} />
+
+      {/* Sharp gradient layer on top */}
+      <div
+        onClick={(e) => {
+          e.stopPropagation()
+          onSelect()
+        }}
+        style={getShapeStyle(false)}
+      />
+    </div>
   )
 }
