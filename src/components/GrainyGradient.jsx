@@ -44,7 +44,14 @@ export default function GrainyGradient({ config, shapes, selectedShapeId, onShap
   return (
     <>
       {/* Background Gradient */}
-      <mesh ref={bgRef} position={[0, 0, -3]}>
+      <mesh
+        ref={bgRef}
+        position={[0, 0, -3]}
+        onClick={(e) => {
+          e.stopPropagation()
+          onShapeSelect(null)
+        }}
+      >
         <planeGeometry args={[20, 15]} />
         <shaderMaterial
           ref={bgMaterialRef}

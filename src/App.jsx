@@ -46,30 +46,26 @@ function App() {
     }
   }
 
-  const handleCanvasClick = (e) => {
-    // Deselect if clicking on background (not a shape)
-    if (e.target.tagName === 'CANVAS') {
-      setSelectedShapeId(null)
-    }
-  }
-
   return (
     <div style={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column' }}>
       {uiVisible && <Header />}
 
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
         {/* Canvas Section */}
-        <div style={{ flex: 1, position: 'relative' }} onClick={handleCanvasClick}>
+        <div style={{ flex: 1, position: 'relative' }}>
           {uiVisible && <Toolbar onAddShape={handleAddShape} />}
 
           {/* UI Toggle Button */}
           <button
-            onClick={() => setUiVisible(!uiVisible)}
+            onClick={(e) => {
+              e.stopPropagation()
+              setUiVisible(!uiVisible)
+            }}
             style={{
               position: 'absolute',
               bottom: '20px',
               left: '20px',
-              zIndex: 1000,
+              zIndex: 10000,
               padding: '10px 20px',
               background: 'rgba(255, 255, 255, 0.9)',
               border: '1px solid #ddd',
@@ -77,6 +73,7 @@ function App() {
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: '500',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             }}
           >
             {uiVisible ? 'Hide Tools' : 'Show Tools'}
@@ -84,13 +81,15 @@ function App() {
 
           {/* Fullscreen Toggle Button */}
           <button
-            onClick={toggleFullscreen}
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleFullscreen()
+            }}
             style={{
               position: 'absolute',
               bottom: '20px',
-              left: uiVisible ? '140px' : '20px',
-              marginLeft: uiVisible ? '0' : '100px',
-              zIndex: 1000,
+              left: uiVisible ? '140px' : '140px',
+              zIndex: 10000,
               padding: '10px 20px',
               background: 'rgba(255, 255, 255, 0.9)',
               border: '1px solid #ddd',
@@ -98,6 +97,7 @@ function App() {
               cursor: 'pointer',
               fontSize: '14px',
               fontWeight: '500',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
             }}
           >
             {isFullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
