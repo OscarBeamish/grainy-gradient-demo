@@ -111,7 +111,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       <div
         style={{
           ...getShapeStyle(false),
-          filter: 'blur(120px)',
+          filter: `blur(${(shape.blur || 40) * 3}px)`,
           WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
           maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.6) 70%, black 90%)',
         }}
@@ -121,7 +121,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       <div
         style={{
           ...getShapeStyle(false),
-          filter: 'blur(80px)',
+          filter: `blur(${(shape.blur || 40) * 2}px)`,
           WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
           maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 10%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.7) 75%, black 95%)',
         }}
@@ -131,7 +131,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       <div
         style={{
           ...getShapeStyle(false),
-          filter: 'blur(40px)',
+          filter: `blur(${shape.blur || 40}px)`,
           WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
           maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 20%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 80%, black 100%)',
         }}
@@ -141,7 +141,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       <div
         style={{
           ...getShapeStyle(false),
-          filter: 'blur(15px)',
+          filter: `blur(${(shape.blur || 40) * 0.4}px)`,
           WebkitMaskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
           maskImage: 'radial-gradient(ellipse at 20% 20%, transparent 30%, rgba(0,0,0,0.5) 60%, black 90%)',
         }}
