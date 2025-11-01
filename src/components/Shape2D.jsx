@@ -93,16 +93,26 @@ export default function Shape2D({ shape, isSelected, onSelect }) {
         transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
       }}
     >
-      {/* Blurred shadow layer behind */}
-      <div style={getShapeStyle(true)} />
+      {/* Blurred shadow layer - offset to one side */}
+      <div
+        style={{
+          ...getShapeStyle(true),
+          left: '52%',
+          top: '52%',
+        }}
+      />
 
-      {/* Sharp gradient layer on top */}
+      {/* Sharp gradient layer on top - uses mask to fade one edge */}
       <div
         onClick={(e) => {
           e.stopPropagation()
           onSelect()
         }}
-        style={getShapeStyle(false)}
+        style={{
+          ...getShapeStyle(false),
+          WebkitMaskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 50%, rgba(0,0,0,0.3) 85%, rgba(0,0,0,0) 100%)',
+          maskImage: 'linear-gradient(135deg, rgba(0,0,0,1) 50%, rgba(0,0,0,0.3) 85%, rgba(0,0,0,0) 100%)',
+        }}
       />
     </div>
   )
