@@ -22,9 +22,9 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
       height: `${shape.scale * 100}px`,
       // Use radial gradient with alpha for smooth fade to transparent
       background: isBlurred
-        ? `radial-gradient(ellipse at 35% 35%, rgba(${color1Rgb.r},${color1Rgb.g},${color1Rgb.b},0.9) 0%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.7) 40%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 70%)`
-        : `radial-gradient(ellipse at 25% 25%, ${shape.color1} 0%, ${shape.color2} 50%, transparent 85%)`,
-      filter: isBlurred ? `blur(${(shape.blur || 40) * 2}px)` : 'blur(2px)',
+        ? `radial-gradient(ellipse at 25% 25%, rgba(${color1Rgb.r},${color1Rgb.g},${color1Rgb.b},0.9) 0%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.7) 30%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0.3) 50%, rgba(${color2Rgb.r},${color2Rgb.g},${color2Rgb.b},0) 70%)`
+        : `radial-gradient(ellipse at 20% 20%, ${shape.color1} 0%, ${shape.color2} 40%, transparent 70%)`,
+      filter: isBlurred ? `blur(${(shape.blur || 40) * 3}px)` : 'blur(0px)',
       opacity: shape.opacity || 0.8,
       cursor: isBlurred ? 'default' : 'pointer',
       mixBlendMode: 'normal',
