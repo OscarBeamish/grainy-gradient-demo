@@ -2,6 +2,9 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
   const size = shape.scale * 100
   const blur = shape.blur || 40
 
+  // Calculate how much to extend the gradient based on blur
+  const blurExtent = blur * 2
+
   return (
     <div
       style={{
@@ -9,8 +12,8 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         left: `calc(50% + ${shape.position.x * 80}px)`,
         top: `calc(50% + ${shape.position.y * 80}px)`,
         transform: `translate(-50%, -50%) rotate(${shape.rotation.z}rad)`,
-        width: `${size}px`,
-        height: `${size}px`,
+        width: `${size + blurExtent}px`,
+        height: `${size + blurExtent}px`,
       }}
       onMouseDown={(e) => {
         e.stopPropagation()
@@ -21,7 +24,7 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         onSelect()
       }}
     >
-      {/* Heavy blur layer - visible on bottom-right */}
+      {/* Single element with blur - gradient creates circular shape that fades to transparent */}
       <div
         style={{
           position: 'absolute',
@@ -29,30 +32,15 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '50%',
-          background: `radial-gradient(circle at 30% 30%, ${shape.color1} 0%, ${shape.color2} 100%)`,
+          // Gradient positioned at top-left, fades to transparent so blur can extend
+          background: `radial-gradient(circle at 35% 35%,
+            ${shape.color1} 0%,
+            ${shape.color2} ${30 - blur/10}%,
+            ${shape.color2}88 ${50 - blur/5}%,
+            transparent ${70 - blur/3}%)`,
           filter: `blur(${blur}px)`,
           opacity: shape.opacity || 0.8,
-          WebkitMaskImage: 'radial-gradient(circle at 25% 25%, transparent 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,1) 70%)',
-          maskImage: 'radial-gradient(circle at 25% 25%, transparent 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,1) 70%)',
-        }}
-      />
-
-      {/* Sharp layer - visible on top-left */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          borderRadius: '50%',
-          background: `radial-gradient(circle at 30% 30%, ${shape.color1} 0%, ${shape.color2} 100%)`,
-          filter: 'blur(0px)',
-          opacity: shape.opacity || 0.8,
           cursor: 'move',
-          WebkitMaskImage: 'radial-gradient(circle at 25% 25%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, transparent 70%)',
-          maskImage: 'radial-gradient(circle at 25% 25%, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 40%, transparent 70%)',
         }}
       />
 
@@ -61,10 +49,10 @@ export default function Shape2D({ shape, isSelected, onSelect, onMouseDown }) {
         <div
           style={{
             position: 'absolute',
-            top: '-4px',
-            left: '-4px',
-            right: '-4px',
-            bottom: '-4px',
+            top: `${blurExtent/2 - 4}px`,
+            left: `${blurExtent/2 - 4}px`,
+            width: `${size}px`,
+            height: `${size}px`,
             borderRadius: '50%',
             border: '2px solid #14b8a6',
             pointerEvents: 'none',
